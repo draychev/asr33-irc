@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"math/rand"
 	"os"
 	"strings"
 	"sync"
@@ -23,9 +24,15 @@ const (
 var log = logger.NewPretty("asr33-irc")
 var channel = os.Getenv(envIRCChannel)
 
+func generateRandomTwoDigit() string {
+	rand.Seed(time.Now().UnixNano())
+	number := rand.Intn(100)
+	return fmt.Sprintf("%02d", number)
+}
+
 var irc = &ircevent.Connection{
 	Server:        os.Getenv(envIRCServer),
-	Nick:          os.Getenv(envIRCNick),
+	Nick:          fmt.Sprintf("%s%s", os.Getenv(envIRCNick), generateRandomTwoDigit()),
 	RequestCaps:   []string{"server-time", "message-tags", "account-tag"},
 	Password:      os.Getenv(envIRCServerPass),
 	Debug:         false,
@@ -58,10 +65,6 @@ func getInput(irc *ircevent.Connection) {
 func main() {
 	checkEnvVars([]string{envIRCServer, envIRCNick, envIRCServerPass, envIRCChannel})
 
-	if err := irc.Connect(); err != nil {
-		log.Fatal().Err(err).Msgf("Could not connect to %s", irc.Server)
-	}
-
 	irc.AddConnectCallback(func(e ircmsg.Message) {
 		irc.Join(strings.TrimSpace(channel))
 		// time.Sleep(3 * time.Second)
@@ -76,7 +79,7 @@ func main() {
 	})
 
 	if err := irc.Connect(); err != nil {
-		log.Fatal().Err(err).Msg("Could not connect")
+		log.Fatal().Err(err).Msgf("Could not connect to %s", irc.Server)
 	}
 
 	var wg sync.WaitGroup
