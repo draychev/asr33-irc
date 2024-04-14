@@ -1,10 +1,10 @@
-module git.sr.ht/~sircmpwn/lpsh
+module github.com/draychev/asr33-irc
 
 go 1.21
 
 require (
-	github.com/creack/pty v1.1.21
 	github.com/draychev/go-toolbox v0.0.0-20231003060312-b5c11a822944
+	github.com/ergochat/irc-go v0.4.0
 )
 
 require (
