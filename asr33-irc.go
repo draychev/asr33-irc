@@ -28,7 +28,7 @@ var irc = &ircevent.Connection{
 	Nick:          os.Getenv(envIRCNick),
 	RequestCaps:   []string{"server-time", "message-tags", "account-tag"},
 	Password:      os.Getenv(envIRCServerPass),
-	Debug:         true,
+	Debug:         false,
 	KeepAlive:     60 * time.Second,
 	Timeout:       45 * time.Second,
 	ReconnectFreq: 3 * time.Second,
