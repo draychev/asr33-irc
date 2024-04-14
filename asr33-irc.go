@@ -6,6 +6,7 @@ import (
 	"os"
 	"strings"
 	"sync"
+	"time"
 
 	"github.com/draychev/go-toolbox/pkg/logger"
 	"github.com/ergochat/irc-go/ircevent"
@@ -23,11 +24,14 @@ var log = logger.NewPretty("asr33-irc")
 var channel = os.Getenv(envIRCChannel)
 
 var irc = &ircevent.Connection{
-	Server:      os.Getenv(envIRCServer),
-	Nick:        os.Getenv(envIRCNick),
-	RequestCaps: []string{"server-time", "message-tags", "account-tag"},
-	Password:    os.Getenv(envIRCServerPass),
-	Debug:       false,
+	Server:        os.Getenv(envIRCServer),
+	Nick:          os.Getenv(envIRCNick),
+	RequestCaps:   []string{"server-time", "message-tags", "account-tag"},
+	Password:      os.Getenv(envIRCServerPass),
+	Debug:         true,
+	KeepAlive:     60 * time.Second,
+	Timeout:       45 * time.Second,
+	ReconnectFreq: 3 * time.Second,
 }
 
 func checkEnvVars(vars []string) {
