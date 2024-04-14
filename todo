@@ -1,0 +1,3 @@
+- Rig into libinput and skip stdin from a parent session
+- print more escapes, such as ^w and term escapes
+- filter out colors
